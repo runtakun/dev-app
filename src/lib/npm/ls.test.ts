@@ -1,4 +1,5 @@
 // tslint:disable:no-expression-statement
+// tslint:disable:no-unsafe-any
 import test from 'ava'
 import { lsPackages } from 'libnpmaccess'
 import { config } from 'dotenv'

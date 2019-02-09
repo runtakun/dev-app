@@ -11,6 +11,7 @@ interface RequestBody {
 	readonly packages: ReadonlyArray<string>
 }
 
+// tslint:disable:no-unsafe-any
 const testBody = (body: any): body is RequestBody =>
 	body.address &&
 	body.packages &&
@@ -59,7 +60,7 @@ export const post = async (req: IncomingMessage) => {
 					? user
 					: (res => {
 							return res instanceof Array
-								? (items => write(items))(createDatas(res, body.address))
+								? write(createDatas(res, body.address))
 								: res
 					  })(await permittedPackages(user.name, token, body))
 		  })(await profile(token))

@@ -3,7 +3,7 @@ import _profile = require('npm-profile')
 
 interface Tfa {
 	readonly mode: 'auth-only'
-	readonly pending: Boolean
+	readonly pending: boolean
 }
 interface NpmProfile {
 	readonly tfa: null | false | Tfa | ['recovery', 'codes'] | string
@@ -20,6 +20,7 @@ interface NpmProfile {
 	readonly github: string
 }
 
+// tslint:disable:no-unsafe-any
 export const profile = async (token: string): Promise<NpmProfile | Error> =>
 	_profile
 		.get({ token })

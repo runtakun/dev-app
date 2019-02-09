@@ -13,11 +13,12 @@ export const get = async <T>(
 	opts: CoreOptions = { json: true }
 ) =>
 	new Promise<Response<T>>(resolve =>
-		_get(`${proto}:${url}`, opts, (_, { headers, statusCode }, body) =>
+		_get(`${proto}:${url}`, opts, (_, { headers, statusCode }, body: T) => {
+			// tslint:disable-next-line:no-expression-statement
 			resolve({
 				body,
 				headers,
 				statusCode
 			})
-		)
+		})
 	)

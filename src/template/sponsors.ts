@@ -36,8 +36,7 @@ const classified = (tiers =>
 
 export const sponsors = async ({ className = 'sponsors', locales }: Opts) =>
 	(async find => html`
-		${
-			style`
+		${style`
 			.${className} {
 				&__tiers {
 					display: grid;
@@ -95,62 +94,53 @@ export const sponsors = async ({ className = 'sponsors', locales }: Opts) =>
 					max-width: 320px;
 				}
 			}
-			`
-		}
+			`}
 		<div class="${className}">
 			<div class="${className}__tiers">
-				${
-					asyncMap(
-						sortBy(classified, 'tier').map(
-							async ({ tier, items }) => html`
-								<h3 class="${className}__tier--${tierToSymbol(tier)}">
-									${tierToSymbol(tier)}
-								</h3>
-								<div
-									class="${className}__list ${className}__list--${
-										tierToSymbol(tier)
-									}"
-								>
-									${
-										asyncMap(
-											sortBy(items, 'start_date').map(
-												async ({ image, messages, link, name }) => html`
-													<div class="${className}__item">
-														<div class="${className}__image">
-															${
-																ampImage({
-																	alt: escapeHTML(name),
-																	src: image.url,
-																	width: image.width,
-																	height: image.height,
-																	layout: 'responsive'
-																})
-															}
-														</div>
-														<div class="${className}__message">
-															${
-																Marked.parse(
-																	(find(messages) || selectFirst(messages)).text
-																)
-															}
-														</div>
-														<a
-															class="${className}__link"
-															href="${link}"
-															target="_blank"
-															rel="noopener"
-															>${name}</a
-														>
-													</div>
-												`
-											)
-										)
-									}
-								</div>
-							`
-						)
+				${asyncMap(
+					sortBy(classified, 'tier').map(
+						async ({ tier, items }) => html`
+							<h3 class="${className}__tier--${tierToSymbol(tier)}">
+								${tierToSymbol(tier)}
+							</h3>
+							<div
+								class="${className}__list ${className}__list--${tierToSymbol(
+									tier
+								)}"
+							>
+								${asyncMap(
+									sortBy(items, 'start_date').map(
+										async ({ image, messages, link, name }) => html`
+											<div class="${className}__item">
+												<div class="${className}__image">
+													${ampImage({
+														alt: escapeHTML(name),
+														src: image.url,
+														width: image.width,
+														height: image.height,
+														layout: 'responsive'
+													})}
+												</div>
+												<div class="${className}__message">
+													${Marked.parse(
+														(find(messages) || selectFirst(messages)).text
+													)}
+												</div>
+												<a
+													class="${className}__link"
+													href="${link}"
+													target="_blank"
+													rel="noopener"
+													>${name}</a
+												>
+											</div>
+										`
+									)
+								)}
+							</div>
+						`
 					)
-				}
+				)}
 			</div>
 		</div>
 	`)(finder(locales))

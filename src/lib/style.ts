@@ -3,6 +3,7 @@ import * as preset from 'postcss-preset-env'
 import * as nested from 'postcss-nested'
 import { html } from './html'
 
+// tslint:disable:no-unsafe-any
 const processor = process({
 	// tslint:disable-next-line:readonly-array
 	plugins: [

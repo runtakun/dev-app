@@ -1,6 +1,8 @@
 import { collapseWhitespace } from './collapse-whitespace'
 
-export const html = async (strings: TemplateStringsArray, ...values) => {
+// tslint:disable:no-unsafe-any
+// tslint:disable-next-line:readonly-array
+export const html = async (strings: TemplateStringsArray, ...values: any[]) => {
 	const resolved = await Promise.all<string>(
 		values.map(async value =>
 			typeof value === 'function' || value instanceof Function ? value() : value

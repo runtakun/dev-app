@@ -1,5 +1,6 @@
 // tslint:disable:no-expression-statement
 // tslint:disable:no-for-in
+// tslint:disable:no-unsafe-any
 // tslint:disable-next-line:no-require-imports
 import listen = require('test-listen')
 import test from 'ava'
@@ -30,7 +31,9 @@ test('Set the specified value in the response header', async t => {
 			{
 				url
 			},
-			(_, { headers }) => resolve({ headers })
+			(_, { headers }) => {
+				resolve({ headers })
+			}
 		)
 	)
 	t.is(result['add-property'], 'test')
