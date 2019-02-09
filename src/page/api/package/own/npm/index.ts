@@ -1,5 +1,6 @@
 import { IncomingMessage } from 'http'
 import { lsPackages } from 'libnpmaccess'
+import { bearer } from '../../../../../lib/bearer'
 
 interface Opts {
 	readonly pathname: string
@@ -9,9 +10,6 @@ interface Opts {
 interface LsPackagesResults {
 	readonly [key: string]: string
 }
-
-const getToken = (req: IncomingMessage) =>
-	(req.headers.authorization || '').replace(/^bearer /i, '')
 
 const ls = async (
 	username?: string,
@@ -23,7 +21,7 @@ const ls = async (
 
 const handlers = {
 	get: async (username: string, req: IncomingMessage) =>
-		ls(username, getToken(req))
+		ls(username, bearer(req))
 }
 
 export const npm = async ({ pathname, request }: Opts) => {
