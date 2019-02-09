@@ -1,6 +1,7 @@
 import { IncomingMessage } from 'http'
 import { pkg } from '../page/api/package'
 import { Result } from '../app'
+import { distribution } from '../page/api/distribution'
 
 const cache = {
 	private: true,
@@ -14,7 +15,12 @@ export const api = async (
 	request: IncomingMessage
 ): Promise<Result> => {
 	const [, , feature] = pathname.split('/')
-	const body = feature === 'package' ? await pkg({ pathname, request }) : false
+	const body =
+		feature === 'package'
+			? await pkg({ pathname, request })
+			: feature === 'distribution'
+			? await distribution({ pathname, request })
+			: false
 	return body instanceof Error
 		? {
 				body: JSON.stringify({ message: body.message }),
