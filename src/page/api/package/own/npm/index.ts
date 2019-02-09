@@ -1,23 +1,11 @@
 import { IncomingMessage } from 'http'
-import { lsPackages } from 'libnpmaccess'
 import { bearer } from '../../../../../lib/bearer'
+import { ls } from '../../../../../lib/npm/ls'
 
 interface Opts {
 	readonly pathname: string
 	readonly request: IncomingMessage
 }
-
-interface LsPackagesResults {
-	readonly [key: string]: string
-}
-
-const ls = async (
-	username?: string,
-	token?: string | ReadonlyArray<string>
-): Promise<LsPackagesResults | Error> =>
-	typeof username === 'string' && typeof token === 'string'
-		? lsPackages(username, { token }).catch(err => err)
-		: new Error('invalid request')
 
 const handlers = {
 	get: async (username: string, req: IncomingMessage) =>
