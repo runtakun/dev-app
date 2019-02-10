@@ -50,7 +50,7 @@ export const dynamoBatchWrite = async <T>({ items, config: conf }: Opts<T>) => {
 	})
 	return table
 		? sync(
-				chunked.map(data => () =>
+				chunked.map(data => async () =>
 					dynamo
 						.batchWrite({
 							RequestItems: {
