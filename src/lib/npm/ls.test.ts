@@ -10,7 +10,7 @@ config()
 const { TEST_NPM_USER, TEST_NPM_READ_TOKEN } = process.env
 
 test('Get user owned packages', async t => {
-	const expected = await lsPackages(TEST_NPM_USER, {
+	const expected = await lsPackages(TEST_NPM_USER as string, {
 		token: TEST_NPM_READ_TOKEN
 	})
 	const pkgs = await ls(TEST_NPM_USER, TEST_NPM_READ_TOKEN)

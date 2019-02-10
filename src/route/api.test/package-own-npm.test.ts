@@ -24,7 +24,7 @@ test.before(async () => {
 })
 
 test('Get user owned packages', async t => {
-	const expected = await lsPackages(TEST_NPM_USER, {
+	const expected = await lsPackages(TEST_NPM_USER as string, {
 		token: TEST_NPM_READ_TOKEN
 	})
 	const res = await get(`${url}/api/package/own/npm/${TEST_NPM_USER}`, 'http', {
