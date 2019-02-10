@@ -1,6 +1,4 @@
 import { DynamoDB } from 'aws-sdk'
-import { chunk } from 'lodash'
-import { sync } from 'promise-parallel-throttle'
 import { config } from 'dotenv'
 import { DynamoConfig } from './dynamo'
 
@@ -14,7 +12,7 @@ const {
 } = process.env
 
 interface Opts<T> {
-	readonly items: ReadonlyArray<T>
+	readonly key: T
 	readonly config?: DynamoConfig
 }
 
@@ -25,15 +23,7 @@ const defaultConfig: DynamoConfig = {
 	table: DYNAMO_TABLE
 }
 
-const putRequest = <T>(items: ReadonlyArray<T>) =>
-	items.map(item => ({
-		PutRequest: {
-			Item: item
-		}
-	}))
-
-export const dynamoBatchWrite = async <T>({ items, config: conf }: Opts<T>) => {
-	const chunked = chunk(items, 25)
+export const dynamoGet = async <T>({ key, config: conf }: Opts<T>) => {
 	const { region, accessKeyId, secretAccessKey, table } = {
 		...defaultConfig,
 		...conf
@@ -44,16 +34,11 @@ export const dynamoBatchWrite = async <T>({ items, config: conf }: Opts<T>) => {
 		secretAccessKey
 	})
 	return table
-		? sync(
-				chunked.map(data => async () =>
-					dynamo
-						.batchWrite({
-							RequestItems: {
-								[table]: putRequest(data)
-							}
-						})
-						.promise()
-				)
-		  )
+		? dynamo
+				.get({
+					Key: key,
+					TableName: table
+				})
+				.promise()
 		: new Error('DYNAMO_TABLE is not set')
 }
